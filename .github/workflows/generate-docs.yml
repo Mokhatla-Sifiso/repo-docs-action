@@ -52,3 +52,4 @@ jobs:
           git add README.md DEV_GUIDE.md
           git commit -m "docs: auto-generate documentation" || exit 0
           git push
+          
