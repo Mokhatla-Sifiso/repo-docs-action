@@ -3,6 +3,9 @@ name: Generate Repository Documentation
 on:
   workflow_call: {}
 
+permissions:
+  contents: write
+
 jobs:
   generate-docs:
     runs-on: ubuntu-latest
@@ -14,58 +17,33 @@ jobs:
         run: |
           REPO=$(basename "$GITHUB_REPOSITORY")
           DATE=$(date +"%Y-%m-%d")
-
-          cat > README.md << EOF
-# $REPO
-
-Auto-generated repository documentation.
-
-## Setup
-\`\`\`bash
-git clone https://github.com/$GITHUB_REPOSITORY.git
-cd $REPO
-npm install
-npm run dev
-\`\`\`
-
-## Structure
-- src/
-- tests/
-- docs/
-
-Generated on $DATE
-EOF
+          echo "# $REPO" > README.md
+          echo "" >> README.md
+          echo "Auto-generated repository documentation." >> README.md
+          echo "" >> README.md
+          echo "Setup:" >> README.md
+          echo "- git clone https://github.com/$GITHUB_REPOSITORY.git" >> README.md
+          echo "- cd $REPO" >> README.md
+          echo "- npm install" >> README.md
+          echo "- npm run dev" >> README.md
+          echo "" >> README.md
+          echo "Generated on $DATE" >> README.md
 
       - name: Generate DEV_GUIDE.md
         run: |
           REPO=$(basename "$GITHUB_REPOSITORY")
           DATE=$(date +"%Y-%m-%d")
-
-          cat > DEV_GUIDE.md << EOF
-# Developer Guide — $REPO
-
-## Development Workflow
-\`\`\`bash
-git checkout -b feature/name
-git commit -m "feat: description"
-git push origin feature/name
-\`\`\`
-
-## Commit Convention
-- feat: feature
-- fix: bug
-- docs: documentation
-- refactor: refactor
-- test: tests
-
-## Testing
-\`\`\`bash
-npm test
-npm run test:watch
-\`\`\`
-
-Generated on $DATE
-EOF
+          echo "# Developer Guide - $REPO" > DEV_GUIDE.md
+          echo "" >> DEV_GUIDE.md
+          echo "Development Workflow:" >> DEV_GUIDE.md
+          echo "- git checkout -b feature/name" >> DEV_GUIDE.md
+          echo "- git commit -m 'feat: description'" >> DEV_GUIDE.md
+          echo "- git push origin feature/name" >> DEV_GUIDE.md
+          echo "" >> DEV_GUIDE.md
+          echo "Testing:" >> DEV_GUIDE.md
+          echo "- npm test" >> DEV_GUIDE.md
+          echo "" >> DEV_GUIDE.md
+          echo "Generated on $DATE" >> DEV_GUIDE.md
 
       - name: Commit documentation
         run: |
@@ -74,4 +52,3 @@ EOF
           git add README.md DEV_GUIDE.md
           git commit -m "docs: auto-generate documentation" || exit 0
           git push
-
