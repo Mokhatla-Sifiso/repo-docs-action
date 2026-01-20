@@ -3,6 +3,9 @@ name: Generate Repository Documentation
 on:
   workflow_call: {}
 
+permissions:
+  contents: write
+
 jobs:
   generate-docs:
     runs-on: ubuntu-latest
@@ -20,15 +23,13 @@ jobs:
 
 Auto-generated repository documentation.
 
-## Setup
-\`\`\`bash
-git clone https://github.com/$GITHUB_REPOSITORY.git
-cd $REPO
-npm install
-npm run dev
-\`\`\`
+Setup:
+- git clone https://github.com/$GITHUB_REPOSITORY.git
+- cd $REPO
+- npm install
+- npm run dev
 
-## Structure
+Structure:
 - src/
 - tests/
 - docs/
@@ -44,25 +45,21 @@ EOF
           cat > DEV_GUIDE.md << EOF
 # Developer Guide — $REPO
 
-## Development Workflow
-\`\`\`bash
-git checkout -b feature/name
-git commit -m "feat: description"
-git push origin feature/name
-\`\`\`
+Development Workflow:
+- git checkout -b feature/name
+- git commit -m "feat: description"
+- git push origin feature/name
 
-## Commit Convention
+Commit Convention:
 - feat: feature
 - fix: bug
 - docs: documentation
 - refactor: refactor
 - test: tests
 
-## Testing
-\`\`\`bash
-npm test
-npm run test:watch
-\`\`\`
+Testing:
+- npm test
+- npm run test:watch
 
 Generated on $DATE
 EOF
