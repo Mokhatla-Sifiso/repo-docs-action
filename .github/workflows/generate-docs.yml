@@ -1,7 +1,7 @@
 name: Generate Repository Documentation
 
 on:
-  workflow_call:
+  workflow_call: {}
 
 jobs:
   generate-docs:
