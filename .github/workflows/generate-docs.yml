@@ -1,34 +1,43 @@
-name: Generate Repository Documentation
+name: Generate Repo Docs
 
 on:
   workflow_call:
+    inputs:
+      generate_readme:
+        type: boolean
+        default: true
+      generate_dev_guide:
+        type: boolean
+        default: true
 
 permissions:
   contents: write
 
 jobs:
-  generate:
+  docs:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate README
+      - name: Generate README.md
+        if: inputs.generate_readme
         run: |
-          echo "# $(basename "$GITHUB_REPOSITORY")" > README.md
+          echo "# $(basename $GITHUB_REPOSITORY)" > README.md
           echo "" >> README.md
-          echo "Auto-generated README" >> README.md
+          echo "Auto-generated README." >> README.md
 
-      - name: Generate Developer Guide
+      - name: Generate DEV_GUIDE.md
+        if: inputs.generate_dev_guide
         run: |
           echo "# Developer Guide" > DEV_GUIDE.md
           echo "" >> DEV_GUIDE.md
-          echo "Auto-generated Developer Guide" >> DEV_GUIDE.md
+          echo "Auto-generated developer guide." >> DEV_GUIDE.md
 
-      - name: Commit files
+      - name: Commit docs
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add README.md DEV_GUIDE.md
-          git commit -m "docs: auto-generate docs" || exit 0
+          git commit -m "docs: auto-generate documentation" || echo "No changes"
           git push
