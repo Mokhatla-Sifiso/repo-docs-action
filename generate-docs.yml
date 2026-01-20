@@ -1,54 +1,34 @@
 name: Generate Repository Documentation
 
 on:
-  workflow_call: {}
+  workflow_call:
 
 permissions:
   contents: write
 
 jobs:
-  generate-docs:
+  generate:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Generate README.md
+      - name: Generate README
         run: |
-          REPO=$(basename "$GITHUB_REPOSITORY")
-          DATE=$(date +"%Y-%m-%d")
-          echo "# $REPO" > README.md
+          echo "# $(basename "$GITHUB_REPOSITORY")" > README.md
           echo "" >> README.md
-          echo "Auto-generated repository documentation." >> README.md
-          echo "" >> README.md
-          echo "Setup:" >> README.md
-          echo "- git clone https://github.com/$GITHUB_REPOSITORY.git" >> README.md
-          echo "- cd $REPO" >> README.md
-          echo "- npm install" >> README.md
-          echo "- npm run dev" >> README.md
-          echo "" >> README.md
-          echo "Generated on $DATE" >> README.md
+          echo "Auto-generated README" >> README.md
 
-      - name: Generate DEV_GUIDE.md
+      - name: Generate Developer Guide
         run: |
-          REPO=$(basename "$GITHUB_REPOSITORY")
-          DATE=$(date +"%Y-%m-%d")
-          echo "# Developer Guide - $REPO" > DEV_GUIDE.md
+          echo "# Developer Guide" > DEV_GUIDE.md
           echo "" >> DEV_GUIDE.md
-          echo "Development Workflow:" >> DEV_GUIDE.md
-          echo "- git checkout -b feature/name" >> DEV_GUIDE.md
-          echo "- git commit -m 'feat: description'" >> DEV_GUIDE.md
-          echo "- git push origin feature/name" >> DEV_GUIDE.md
-          echo "" >> DEV_GUIDE.md
-          echo "Testing:" >> DEV_GUIDE.md
-          echo "- npm test" >> DEV_GUIDE.md
-          echo "" >> DEV_GUIDE.md
-          echo "Generated on $DATE" >> DEV_GUIDE.md
+          echo "Auto-generated Developer Guide" >> DEV_GUIDE.md
 
-      - name: Commit documentation
+      - name: Commit files
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add README.md DEV_GUIDE.md
-          git commit -m "docs: auto-generate documentation" || exit 0
+          git commit -m "docs: auto-generate docs" || exit 0
           git push
